@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         part7Passage.innerHTML = '';
 
         try {
-            const response = await fetch('http://127.0.0.1:5000/get_question', {
+            const response = await fetch('http://localhost:8000/get_question', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                throw new Error(`HTTP error status: ${response.status}`);
             }
 
             const data = await response.json();

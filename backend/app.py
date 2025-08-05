@@ -1,22 +1,37 @@
 import os
+import json
+
+import uvicorn
 import google.generativeai as genai
-from flask import Flask, jsonify, request
-from flask_cors import CORS
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel
 from dotenv import load_dotenv
 
 load_dotenv()
 
-app = Flask(__name__)
-CORS(app)
+app = FastAPI(title="TOEIC Study App API", version="1.0.0")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Google Gemini API 설정
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
-@app.route('/get_question', methods=['POST'])
-def get_question():
-    data = request.get_json()
-    part = data.get('part', '5')
-    level = data.get('level', 'medium')
+class QuestionRequest(BaseModel):
+    part: str = "5"
+    level: str = "medium"
+
+@app.post('/get_question')
+async def get_question(request: QuestionRequest):
+    part = request.part
+    level = request.level
 
     model = genai.GenerativeModel('gemini-2.5-pro')
 
@@ -41,10 +56,25 @@ def get_question():
     try:
         response = model.generate_content(prompt)
         clean_response = response.text.strip().replace('```json', '').replace('```', '')
-        return jsonify(eval(clean_response))
+        
+        try:
+            result = json.loads(clean_response)
+        except json.JSONDecodeError:
+            # eval 대신 더 안전한 방법 사용
+            result = eval(clean_response)
+            
+        return JSONResponse(content=result)
     except Exception as e:
         print(f"Error during Gemini API call: {e}")
-        return jsonify({"error": "Failed to generate question from API."}), 500
+        raise HTTPException(status_code=500, detail="Failed to generate question from API.")
+
+@app.get('/')
+async def root():
+    return {"message": "TOEIC Study App API is running"}
+
+@app.get('/health')
+async def health_check():
+    return {"status": "healthy"}
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)

@@ -1,4 +1,4 @@
-# AI TOEIC Master
+# AI TOEIC Generator
 
 Google Gemini API를 활용한 AI 토익 문제 생성기입니다.
 Toeic reading part 5, 6, 7의 문제를 생성해줍ㄴ디ㅏ.
@@ -58,10 +58,19 @@ GEMINI_API_KEY=your_google_gemini_api_key_here
 ```bash
 cd backend
 python app.py
-netstat -anp | grep 5000
+
+
+# 서버가 정상적으로 실행되었는지 확인
+curl http://localhost:8000/health
 ```
 
-### 6. 프론트엔드 실행
+### 6. API 문서 확인
+서버 실행 후 다음 URL에서 API 문서를 확인할 수 있습니다:
+- **Swagger UI**: http://localhost:8000/docs
+- **ReDoc**: http://localhost:8000/redoc
+- **Health Check**: http://localhost:8000/health
+
+### 7. 프론트엔드 실행
 frontend/index.html 파일 실행
 
 ## Google API 설정
