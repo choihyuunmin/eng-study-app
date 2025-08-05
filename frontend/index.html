@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI TOEIC Master</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-brain"></i> AI TOEIC Master</h1>
+        <div class="controls">
+            <div class="control-group">
+                <label for="part-select"><i class="fas fa-list-ol"></i> Part</label>
+                <select id="part-select">
+                    <option value="5">Part 5 (Grammar)</option>
+                    <option value="6">Part 6 (Text Completion)</option>
+                    <option value="7">Part 7 (Reading)</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="level-select"><i class="fas fa-chart-line"></i> Level</label>
+                <select id="level-select">
+                    <option value="easy">🟢 Easy</option>
+                    <option value="medium">🟡 Medium</option>
+                    <option value="hard">🔴 Hard</option>
+                </select>
+            </div>
+            <button id="start-btn">
+                <i class="fas fa-magic"></i> Generate Question
+            </button>
+        </div>
+
+        <div id="loading" style="display: none;">
+            <span>문제를 생성하고 있습니다...</span>
+        </div>
+
+        <div id="quiz-area">
+            <div id="part7-passage" class="passage" style="display: none;"></div>
+            <div id="question-container"></div>
+            <div id="explanation-container" style="display: none;">
+                <h3><i class="fas fa-lightbulb"></i> 해설</h3>
+                <p id="explanation"></p>
+            </div>
+        </div>
+
+        <button id="submit-btn" style="display: none;">
+            <i class="fas fa-check-circle"></i> 답안 제출
+        </button>
+    </div>
+
+    <script src="static/js/script.js"></script>
+</body>
+</html>
